@@ -56,7 +56,7 @@ JSON2Video makes video creation easy as a piece of cake:
     let scene = new Scene;
 
     // Set the scene background color
-    scene.set("background_color",  "#4392F1");
+    scene.set("background-color",  "#4392F1");
 
     // Add a text element printing "Hello world" in a fancy way (basic/006)
     // The element is 10 seconds long and starts 2 seconds from the scene start
