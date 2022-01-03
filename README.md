@@ -77,6 +77,15 @@ JSON2Video makes video creation easy as a piece of cake:
 
     // Call the API and render the movie
     movie.render();
+
+    // Wait for the movie to finish rendering
+    movie
+        .waitToFinish((status) => {
+            console.log("Rendering: ", status.movies[0].status, " / ", status.movies[0].task);
+        })
+        .then((status) => {
+            console.log("Movie is ready: ", status.movies[0].url);
+        });
 ```
 
 This is the resulting video:
