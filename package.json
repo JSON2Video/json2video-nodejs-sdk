@@ -1,0 +1,27 @@
+{
+  "name": "json2video-sdk",
+  "version": "1.0.0",
+  "description": "SDK for creating videos programmatically using JSON2Video API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSON2Video/json2video-nodejs-sdk.git"
+  },
+  "keywords": [
+    "video",
+    "slideshow",
+    "text-to-speech",
+    "video-editing",
+    "video-processing",
+    "watermarking"
+  ],
+  "author": "JSON2Video.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JSON2Video/json2video-nodejs-sdk/issues"
+  },
+  "homepage": "https://github.com/JSON2Video/json2video-nodejs-sdk#readme"
+}
