@@ -100,7 +100,7 @@ class Movie extends Base {
 
         if (body) {
             data = JSON.stringify(body);
-            headers['Content-Length'] = data.length;
+            headers['Content-Length'] = Buffer.byteLength(data);
         }
 
         const options = {
