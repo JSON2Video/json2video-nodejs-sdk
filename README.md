@@ -30,7 +30,7 @@ The SDK has no external dependencies on other packages.
 2) Use npm:
 
 ```
-$ npm install json2video-sdk
+npm install json2video-sdk
 ```
 
 ## Hello world
