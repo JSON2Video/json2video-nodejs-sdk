@@ -1,3 +1,5 @@
+Note: Updated for API v2.0
+
 # Create videos programmatically in Node JS
 Create and edit videos: add watermarks, resize videos, create slideshows, add soundtrack, automate the creation of videos in multiple languages, add voice-over, add text animations.
 
@@ -38,54 +40,60 @@ JSON2Video makes video creation easy as a piece of cake:
 
 ```javascript
     const {Movie, Scene} = require("json2video-sdk");
-    
-    // Create a new movie
-    let movie = new Movie;
+        
+    async function main() {
+        // Create a new movie
+        let movie = new Movie;
 
-    // Set your API key
-    // Get your free API key at https://json2video.com
-    movie.setAPIKey(YOUR_API_KEY);
+        // Set your API key
+        // Get your free API key at https://json2video.com
+        movie.setAPIKey(YOUR_API_KEY);
 
-    // Set a project ID
-    movie.set("project", "myproj");
+        // Set movie quality: low, medium, high
+        movie.set("quality", "high");
 
-    // Set movie quality: low, medium, high
-    movie.set("quality", "high");
+        // Generate a video draft 
+        movie.set("draft", true);
 
-    // Create a new scene
-    let scene = new Scene;
+        // Create a new scene
+        let scene = new Scene;
 
-    // Set the scene background color
-    scene.set("background-color",  "#4392F1");
+        // Set the scene background color
+        scene.set("background-color",  "#4392F1");
 
-    // Add a text element printing "Hello world" in a fancy way (basic/006)
-    // The element is 10 seconds long and starts 2 seconds from the scene start
-    // Element's vertical position is 50 pixels from the top
-    scene.addElement({
-        type: "text",
-        template: "basic/006",
-        items: [
-            { text: "Hello world" }
-        ],
-        y: 50,
-        duration: 10,
-        start: 2
-    });
-
-    // Add the scene to the movie
-    movie.addScene(scene);
-
-    // Call the API and render the movie
-    movie.render();
-
-    // Wait for the movie to finish rendering
-    movie
-        .waitToFinish((status) => {
-            console.log("Rendering: ", status.movies[0].status, " / ", status.movies[0].task);
-        })
-        .then((status) => {
-            console.log("Movie is ready: ", status.movies[0].url);
+        // Add a text element printing "Hello world" in a fancy way (style 003)
+        // The element is 10 seconds long and starts 2 seconds from the scene start
+        scene.addElement({
+            type: "text",
+            style: "003",
+            text: "Hello world",
+            duration: 10,
+            start: 2
         });
+
+        // Add the scene to the movie
+        movie.addScene(scene);
+
+        // Call the API and render the movie
+        let render = await movie.render();
+        console.log(render);
+
+        // Wait for the movie to finish rendering
+        await movie
+            .waitToFinish((status) => {
+                console.log("Rendering: ", status.movie.status, " / ", status.movie.message);
+            })
+            .then((status) => {
+                console.log("Movie is ready: ", status.movie.url);
+                console.log("Remaining final movies: ", status.remaining_quota.movies);
+                console.log("Remaining drafts: ", status.remaining_quota.drafts);
+            })
+            .catch((err) => {
+                console.log("Error: ", err);
+            });
+    }
+
+    main();
 ```
 
 This is the resulting video:

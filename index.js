@@ -1,6 +1,6 @@
 /*
 
-    JSON2Video SDK v1.0
+    JSON2Video SDK v2.0
 
     Author: JSON2Video.com
     Description: SDK for creating videos programmatically using JSON2Video API
@@ -66,21 +66,21 @@ class Scene extends Base {
             if (duration !== null) this.object.transition.duration = duration;
             if (type !== null) this.object.transition.type = type;
         }
-    }
+    };
 }
 
 class Movie extends Base {
     constructor(...a) {
         super(...a);
-        this.properties = ['comment', 'project', 'width', 'height', 'resolution', 'quality', 'fps', 'cache'];
-        this.api_url = 'https://api.json2video.com/v1/movies';
+        this.properties = ['comment', 'draft', 'width', 'height', 'resolution', 'quality', 'fps', 'cache'];
+        this.api_url = 'https://api.json2video.com/v2/movies';
         this.apikey = null;
     }
 
     // setAPIKey(): Sets your API Key
     setAPIKey = function (apikey) {
         this.apikey = apikey;
-    }
+    };
 
     // addScene(): Adds a new scene in the Movie
     addScene = function (scene = null) {
@@ -90,7 +90,7 @@ class Movie extends Base {
             return true;
         }
         else throw "Invalid scene";
-    }
+    };
 
     // fetch(): Encapsulates API calls
     fetch = async function (method = "GET", url = "", body = null, headers = {}) {
@@ -132,52 +132,58 @@ class Movie extends Base {
             if (data) req.write(data);
             req.end();
         });
-    }
+    };
 
     // render(): Starts a new rendering job
     render = async function() {
         if (!this.apikey) throw "Invalid API Key";
 
-        return this.fetch("POST", this.api_url, this.object, {
+        let response = await this.fetch("POST", this.api_url, this.object, {
             "Content-Type": "application/json",
             "x-api-key": this.apikey
         });
-    }
+
+        if (response && response.success && response.project) this.object.project = response.project;
+
+        return response;
+    };
 
     // getStatus(): Gets the current project rendering status
-    getStatus = async function() {
-        if (!this.apikey) throw "Invalid API Key";
-        if (!("project" in this.object)) throw "Project ID not set";
+    getStatus = async function(project=null) {
+        if (!project) project = this.object.project??null;
+        if (!this.apikey) throw("Invalid API Key");
+        if (!("project" in this.object)) throw("Project ID not set");
 
         let url = this.api_url + "?project=" + this.object.project;
 
         return this.fetch("GET", url, null, {
             "x-api-key": this.apikey
         });
-    }
+    };
 
     // waitToFinish(): Waits the current project to finish rendering by checking status every 1 second
     waitToFinish = async function(callback=null) {
         return new Promise((resolve, reject) => {
             const interval_id = setInterval((async function() {
-                let response = await this.getStatus();
+                let response = await this.getStatus().catch((err) => {
+                    reject(err);
+                });
 
-                if (response && response.success && ("movies" in response) && response.movies.length==1) {
-                    if (response.movies[0].status=="done") {
+                if (response && response.success && ("movie" in response)) {
+                    if (response.movie.status=="done") {
                         clearInterval(interval_id);
                         resolve(response);
                     }
+                    if (typeof callback == "function") callback(response);
                 }
                 else {
-                    console.log("Error");
                     clearInterval(interval_id);
                     resolve(response);
                 }
-
-                if (typeof callback == "function") callback(response);
-            }).bind(this), 1000);
+                
+            }).bind(this), 5000);
         });
-    }
+    };
 }
 
 // Export Scene and Movie objects
