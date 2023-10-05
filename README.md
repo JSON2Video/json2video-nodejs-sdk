@@ -84,9 +84,8 @@ JSON2Video makes video creation easy as a piece of cake:
                 console.log("Rendering: ", status.movie.status, " / ", status.movie.message);
             })
             .then((status) => {
+                console.log("Response: ", status);
                 console.log("Movie is ready: ", status.movie.url);
-                console.log("Remaining final movies: ", status.remaining_quota.movies);
-                console.log("Remaining drafts: ", status.remaining_quota.drafts);
             })
             .catch((err) => {
                 console.log("Error: ", err);
