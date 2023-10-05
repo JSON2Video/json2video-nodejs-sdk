@@ -1,6 +1,6 @@
 {
   "name": "json2video-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "SDK for creating videos programmatically using JSON2Video API",
   "main": "index.js",
   "scripts": {
