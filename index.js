@@ -72,7 +72,7 @@ class Scene extends Base {
 class Movie extends Base {
     constructor(...a) {
         super(...a);
-        this.properties = ['comment', 'draft', 'width', 'height', 'resolution', 'exports', 'quality', 'fps', 'cache'];
+        this.properties = ['comment', 'draft', 'width', 'height', 'resolution', 'exports', 'quality', 'fps', 'cache', 'template', 'variables', 'id'];
         this.api_url = 'https://api.json2video.com/v2/movies';
         this.apikey = null;
     }
